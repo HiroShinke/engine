@@ -59,9 +59,56 @@
 	n
 	(+ (fibonacci (- n 1))
 	   (fibonacci (- n 2))))))
-	   
 
-		
-		  
-		
-   
+(define-syntax timed-lambda
+  (syntax-rules ()
+    ((_ formals exp1 exp2 ...)
+     (lambda formals (decrement-timer) exp1 exp2 ...))))
+
+
+(define fibonacci2
+  (timed-lambda
+   (n)
+   (if (< n 2)
+       n
+       (+ (fibonacci (- n 1))
+	  (fibonacci (- n 2))))))
+
+(define mileage
+  (lambda (thunk)
+    (let loop ((eng (make-engine thunk))
+	       (total-ticks 0))
+      (eng 50
+	   (lambda (ticks value)
+	     (+ total-ticks (- 50 ticks)))
+	   (lambda (new-eng)
+	     (loop new-eng (+ total-ticks 50))))
+      )
+    ))
+
+(define round-robin
+  (lambda (engs)
+    (if (null? engs)
+	'()
+	((car engs) 1
+	 (lambda (ticks value)
+	   (cons value (round-robin (cdr engs))))
+	 (lambda (eng)
+	   (round-robin
+	    (append (cdr engs) (list eng)))))
+	)
+    )
+  )
+  
+
+(define test1
+  (lambda ()
+    (round-robin
+     (map (lambda (x)
+	    (make-engine
+	     (lambda () (fibonacci2 x))))
+	  '(4 5 2 8 10 15 3 5 6 2)))
+    ))
+
+
+    
