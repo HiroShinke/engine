@@ -22,6 +22,22 @@
 	      (begin
 		(set! clock (- clock 1))
 		(if (= clock 0) (handler)))))))
+;;
+;;  proc : () -> X
+;;  complete : ticks -> X -> A
+;;  expire : engine -> B
+;;
+;;  thunk : () -> X
+;;  make-engine: thunk -> (ticks -> complete -> expire -> A|B)
+;;  resume : ticks -> A
+;;  engine: ticks -> complete -> expire -> A|B
+;;
+;;  escape : (() -> A|B) ) -> A|B
+;;  do-complete : ticks -> X ->  A
+;;  do-expire : (ticks -> A|B)  -> B
+;;
+;;  new-engine: (ticks -> A)  -> (ticks -> complete -> expire -> A|B )
+;;
 
 (define make-engine
   (let ((do-complete #f)
@@ -109,6 +125,3 @@
 	     (lambda () (fibonacci2 x))))
 	  '(4 5 2 8 10 15 3 5 6 2)))
     ))
-
-
-    
