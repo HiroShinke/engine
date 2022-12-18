@@ -29,12 +29,12 @@
 ;;
 ;;  thunk : () -> X
 ;;  make-engine: thunk -> (ticks -> complete -> expire -> A|B)
-;;  resume : ticks -> A
+;;  resume : ticks -> (() -> A)
 ;;  engine: ticks -> complete -> expire -> A|B
 ;;
-;;  escape : (() -> A|B) ) -> A|B
-;;  do-complete : ticks -> X ->  A
-;;  do-expire : (ticks -> A|B)  -> B
+;;  escape : (() -> A|B)  -> (() -> A|B)
+;;  do-complete : ticks -> X ->  (() -> A)
+;;  do-expire: (ticks -> (() -> A|B) )  -> (() -> B)
 ;;
 ;;  new-engine: (ticks -> A)  -> (ticks -> complete -> expire -> A|B )
 ;;
